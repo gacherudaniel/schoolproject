@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contractor Profile Form</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  <style>
+    /* Add your custom styles here */
+    /* Example styles for the contractor profile form */
+    .form-group {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Contractor Profile Form</h2>
+    <form>
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" class="form-control" id="fullName" name="fullName" required>
+      </div>
+
+      <div class="form-group">
+        <label for="dateOfBirth">Date of Birth</label>
+        <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" required>
+      </div>
+
+      <div class="form-group">
+        <label for="skills">Skills</label>
+        <input type="text" class="form-control" id="skills" name="skills" required>
+        <small class="form-text text-muted">Separate skills with commas (e.g., Java, JavaScript, HTML/CSS)</small>
+      </div>
+
+      <div class="form-group">
+        <label for="workExperience">Work Experience</label>
+        <textarea class="form-control" id="workExperience" name="workExperience" rows="5" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="education">Education and Qualifications</label>
+        <textarea class="form-control" id="education" name="education" rows="3" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="projectHistory">Project History</label>
+        <textarea class="form-control" id="projectHistory" name="projectHistory" rows="5" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="tel" class="form-control" id="phone" name="phone" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Save Profile</button>
+    </form>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>
