@@ -4,10 +4,10 @@ include_once("includes/config.php");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get form values
     $task_name = $_POST['task_name'];
-    $selectedProjectId = $_POST['selectedProjectId'];
+    $selectedProjectId = $_POST['project_name'];
     $deadline = $_POST['deadline'];
     $priority = $_POST['priority'];
-    $selectedContractorId = $_POST['selectedContractorId'];
+    $selectedContractorId = $_POST['assigned_contractor'];
 
     // Check if the selected project ID exists in the projects table
     $query = "SELECT COUNT(*) FROM projects WHERE project_id = :selectedProjectId";

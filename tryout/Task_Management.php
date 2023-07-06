@@ -92,35 +92,35 @@
                     <thead>
                       <tr>
                         <th>Task Name</th>
-                        <th>Project Name</th>
-                        <th>Assigned Contractor</th>
+                        <th>Project ID</th>
+                        <th>Assigned Contractor ID</th>
                         <th>Deadline</th>
-                        <th>Status</th>
+                        <th>Priority</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                     <?php
                       // Fetch the contractors from the database
-                      $query = "SELECT task_name, project_id, assigned_to, deadline, progress FROM tasks";
+                      $query = "SELECT task_name, project_id, assigned_to, deadline, priority FROM tasks";
                       $stmt = $dbh->query($query);
 
                       // Check if there are any contractors
                       if ($stmt->rowCount() > 0) {
                         // Loop through the result set and generate table rows
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                          $task_name = $row['title'];
+                          $task_name = $row['task_name'];
                           $project_name = $row['project_id'];
                           $assigned_contractor = $row['assigned_to'];
                           $deadline = $row['deadline'];
-                          $progress = $row['progress'];
+                          $priority = $row['priority'];
 
                           echo '<tr>';
                           echo '<td>' . $task_name . '</td>';
                           echo '<td>' . $project_name . '</td>';
                           echo '<td>' . $assigned_contractor . '</td>';
                           echo '<td>' . $deadline . '</td>';
-                          echo '<td>' . $progress . '</td>';
+                          echo '<td>' . $priority . '</td>';
                           echo '<td>';
                           echo '<button>Delete</button>';
                           echo '</td>';
@@ -174,22 +174,21 @@
                     </select>
                     <!-- Add a hidden input field to store the selected project ID -->
                     <input type="hidden" id="selectedProjectId" name="selectedProjectId">
-                      <script>
-                        // Retrieve the selected project ID and set it as the value of the hidden input field
-                        var projectSelect = document.getElementById('project_name');
-                        var hiddenInput = document.getElementById('selectedProjectId');
+                    <script>
+                      // Retrieve the selected project ID and set it as the value of the hidden input field
+                      var projectSelect = document.getElementById('project_name');
+                      var hiddenInput = document.getElementById('selectedProjectId');
 
-                        projectSelect.addEventListener('change', function() {
-                          var selectedProjectId = projectSelect.value;
-                          hiddenInput.value = selectedProjectId;
-                        });
-                        projectSelect.addEventListener('change', function() {
-                          var selectedProjectId = projectSelect.value;
-                          hiddenInput.value = selectedProjectId;
-                          console.log(selectedProjectId); // Check if the selected project ID is logged
-                        });
-                      </script>
-                    
+                      projectSelect.addEventListener('change', function() {
+                        var selectedProjectId = projectSelect.value;
+                        hiddenInput.value = selectedProjectId;
+                      });
+                      projectSelect.addEventListener('change', function() {
+                        var selectedProjectId = projectSelect.value;
+                        hiddenInput.value = selectedProjectId;
+                        console.log(selectedProjectId); // Check if the selected project ID is logged
+                      });
+                    </script>
                   </div>
 
                   <div class="form-group">
