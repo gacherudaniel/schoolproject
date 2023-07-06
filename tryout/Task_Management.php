@@ -100,60 +100,151 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <!-- Display a list of tasks with their details -->
-                      <tr>
-                        <td>Task A</td>
-                        <td>Project A</td>
-                        <td>Contractor 1</td>
-                        <td>2023-07-15</td>
-                        <td>In Progress</td>
-                        <td>
-                          <button class="btn btn-primary btn-sm">Edit</button>
-                          <button class="btn btn-danger btn-sm">Delete</button>
-                        </td>
-                      </tr>
-                      <!-- Add more task rows as needed -->
-                    </tbody>
+                    <?php
+                      // Fetch the contractors from the database
+                      $query = "SELECT task_name, project_id, assigned_to, deadline, progress FROM tasks";
+                      $stmt = $dbh->query($query);
+
+                      // Check if there are any contractors
+                      if ($stmt->rowCount() > 0) {
+                        // Loop through the result set and generate table rows
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                          $task_name = $row['title'];
+                          $project_name = $row['project_id'];
+                          $assigned_contractor = $row['assigned_to'];
+                          $deadline = $row['deadline'];
+                          $progress = $row['progress'];
+
+                          echo '<tr>';
+                          echo '<td>' . $task_name . '</td>';
+                          echo '<td>' . $project_name . '</td>';
+                          echo '<td>' . $assigned_contractor . '</td>';
+                          echo '<td>' . $deadline . '</td>';
+                          echo '<td>' . $progress . '</td>';
+                          echo '<td>';
+                          echo '<button>Delete</button>';
+                          echo '</td>';
+                          echo '</tr>';
+                        }
+                      } else {
+                        echo '<tr><td colspan="3">No tasks found</td></tr>';
+                      }
+
+                      // Close the statement
+                      $stmt = null;
+                    ?>
+                  </tbody>
                   </table>
                 </div>
 
                 <!-- Form for creating a new task -->
                 <h3>Create New Task</h3>
-                <form>
+                <form method="POST" action="Tasks_function.php">
                   <div class="form-group">
-                    <label for="taskName">Task Name</label>
-                    <input type="text" class="form-control" id="taskName" placeholder="Enter the task name">
+                    <label for="task_name">Task Name</label>
+                    <input type="text" class="form-control"  id="task_name" name="task_name" placeholder="Enter the task name">
                   </div>
 
                   <div class="form-group">
-                    <label for="projectName">Project Name</label>
-                    <select class="form-control" id="projectName">
-                      <option value="project1">Project A</option>
-                      <option value="project2">Project B</option>
-                      <!-- Add more project options as needed -->
+                    <label for="project_name">Project Name</label>
+                    <select class="form-control" name="project_name" id="project_name">
+                      <?php
+                        // Assuming you have established a valid PDO database connection
+
+                        // Fetch the values from the database
+                        $query = "SELECT project_id, name FROM projects";
+                        $result = $dbh->query($query);
+
+                        // Check if the query was successful
+                        if ($result) {
+                          // Loop through the result set and generate the options
+                          while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                            $projectId = $row['project_id'];
+                            $projectName = $row['name'];
+                            echo "<option value=\"$projectId\">$projectName</option>";
+                          }
+                        } else {
+                          // Handle the error if the query fails
+                          $errorInfo = $dbh->errorInfo();
+                          echo "Error: " . $errorInfo[2];
+                        }
+                      ?>
+                      
+                        
                     </select>
+                    <!-- Add a hidden input field to store the selected project ID -->
+                    <input type="hidden" id="selectedProjectId" name="selectedProjectId">
+                      <script>
+                        // Retrieve the selected project ID and set it as the value of the hidden input field
+                        var projectSelect = document.getElementById('project_name');
+                        var hiddenInput = document.getElementById('selectedProjectId');
+
+                        projectSelect.addEventListener('change', function() {
+                          var selectedProjectId = projectSelect.value;
+                          hiddenInput.value = selectedProjectId;
+                        });
+                        projectSelect.addEventListener('change', function() {
+                          var selectedProjectId = projectSelect.value;
+                          hiddenInput.value = selectedProjectId;
+                          console.log(selectedProjectId); // Check if the selected project ID is logged
+                        });
+                      </script>
+                    
                   </div>
 
                   <div class="form-group">
-                    <label for="assignedContractor">Assigned Contractor</label>
-                    <select class="form-control" id="assignedContractor">
-                      <option value="contractor1">Contractor 1</option>
-                      <option value="contractor2">Contractor 2</option>
+                    <label for="assigned_contractor">Assigned Contractor</label>
+                    <select class="form-control"name="assigned_contractor" id="assigned_contractor">
+                      <?php
+                          // Assuming you have established a valid PDO database connection
+
+                          // Fetch the values from the database
+                          $query = "SELECT contractor_id, name FROM contractors";
+                          $result = $dbh->query($query);
+
+                          // Check if the query was successful
+                          if ($result) {
+                            // Loop through the result set and generate the options
+                            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                              $contractorId = $row['contractor_id'];
+                              $contractorName = $row['name'];
+                              echo "<option value=\"$contractorId\">$contractorName</option>";
+                            }
+                          } else {
+                            // Handle the error if the query fails
+                            $errorInfo = $dbh->errorInfo();
+                            echo "Error: " . $errorInfo[2];
+                          }
+                      ?>
                       <!-- Add more contractor options as needed -->
                     </select>
+                    <!-- Add a hidden input field to store the selected project ID -->
+                    <input type="hidden" id="selectedContractorId" name="selectedContractorId">
+
+
+                    <script>
+                      // Retrieve the selected project ID and set it as the value of the hidden input field
+                      var contractorSelect = document.getElementById('assigned_contractor');
+                      var hiddenInput = document.getElementById('selectedContractorId');
+
+                      contractorSelect.addEventListener('change', function() {
+                        var selectedContractorId = contractorSelect.value;
+                        hiddenInput.value = selectedContractorId;
+                      });
+                    </script>
                   </div>
 
                   <div class="form-group">
                     <label for="deadline">Deadline</label>
-                    <input type="date" class="form-control" id="deadline">
+                    <input type="date" class="form-control" name="deadline" id="deadline">
                   </div>
 
                   <div class="form-group">
-                    <label for="status">Status</label>
-                    <select class="form-control" id="status">
-                      <option value="inProgress">In Progress</option>
-                      <option value="completed">Completed</option>
-                      <option value="pending">Pending</option>
+                    <label for="status">Priority</label>
+                    <select class="form-control" name="priority" id="priority">
+                      <option value="Low">Low</option>
+                      <option value="High">High</option>
+                      <option value="Medium">Medium</option>
                     </select>
                   </div>
 
@@ -174,10 +265,7 @@
 		<!-- Slimscroll JS -->
 		<script src="assets/js/jquery.slimscroll.min.js"></script>
 		
-		<!-- Chart JS -->
-		<script src="assets/plugins/morris/morris.min.js"></script>
-		<script src="assets/plugins/raphael/raphael.min.js"></script>
-		<script src="assets/js/chart.js"></script>
+		
 		
 		<!-- Custom JS -->
 		<script src="assets/js/app.js"></script>

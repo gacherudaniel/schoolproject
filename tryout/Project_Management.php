@@ -1,10 +1,9 @@
 <?php
 	session_start();
-	error_reporting(0);
+	error_reporting(E_ALL); 
 	include_once('includes/config.php');
-
+ 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -86,7 +85,7 @@
         <div class="page-header">
           <div class="row">
             <div class="col-sm-12">
-              <h3 class="page-title">Welcome <?php echo htmlentities(ucfirst($_SESSION['userlogin']));?>!</h3>
+              <h3 class="page-title">Welcome</h3>
               <ul class="breadcrumb">
                 <li class="breadcrumb-item active">Project Management</li>
               </ul>
@@ -96,29 +95,53 @@
         <!-- /Page Header -->
 
     <div class="project-list">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Project Name</th>
-            <th>Assigned Contractors</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Display a list of projects with their details -->
-          <tr>
-            <td>Project A</td>
-            <td>Contractor 1, Contractor 2</td>
-            <td>In Progress</td>
-            <td>
-              <button class="btn btn-primary btn-sm">Edit</button>
-              <button class="btn btn-danger btn-sm">Delete</button>
-            </td>
-          </tr>
-          <!-- Add more project rows as needed -->
-        </tbody>
-      </table>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Project Name</th>
+          <th>Assigned Contractors</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        // Fetch the projects from the database
+        $query = "SELECT p.name, p.status, GROUP_CONCAT(c.contractor_id SEPARATOR ', ') AS contractor_assignments
+                  FROM projects p
+                  INNER JOIN contractor_assignments ca ON p.project_id = ca.project_id
+                  INNER JOIN contractors c ON ca.contractor_id = c.contractor_id
+                  GROUP BY p.project_id";
+        $stmt = $dbh->query($query);
+
+        // Check if there are any projects
+        if ($stmt->rowCount() > 0) {
+          // Loop through the result set and generate table rows
+          while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $projectName = $row['name'];
+            $assignedContractors = $row['contractor_assignments'];
+            $status = $row['status'];
+
+            echo '<tr>';
+            echo '<td>' . $projectName . '</td>';
+            echo '<td>' . $assignedContractors . '</td>';
+            echo '<td>' . $status . '</td>';
+            echo '<td>';
+            echo '<button class="btn btn-primary btn-sm">Edit</button>';
+            echo '<button class="btn btn-danger btn-sm">Delete</button>';
+            echo '</td>';
+            echo '</tr>';
+          }
+        } else {
+          echo '<tr><td colspan="4">No projects found</td></tr>';
+        }
+
+        // Close the statement
+        $stmt = null;
+        ?>
+      </tbody>
+    </table>
+
     </div>
 
     <!-- Form for creating a new project -->
@@ -133,29 +156,30 @@
         <label for="contractors">Assigned Contractors</label>
         <select class="form-control" id="contractors" name="contractors[]" multiple required>
           <?php
+            // Assuming you have established a valid PDO database connection
 
-          // Fetch the contractors from the database
-          $query = "SELECT contractor_id, name FROM contractors";
-          $result = mysqli_query($dbh, $query);
+            // Fetch the values from the database
+            $query = "SELECT contractor_id, name FROM contractors";
+            $result = $dbh->query($query);
 
-          // Check if any records were returned
-          if (mysqli_num_rows($result) > 0) {
-              while ($row = mysqli_fetch_assoc($result)) {
-                  $contractorId = $row['contractor_id'];
-                  $contractorName = $row['name'];
-
-                  // Output the option tag with contractor details
-                  echo "<option value=\"$contractorId\">$contractorName</option>";
+            // Check if the query was successful
+            if ($result) {
+              // Loop through the result set and generate the options
+              while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                $contractorId = $row['contractor_id'];
+                $contractorName = $row['name'];
+                echo "<option value=\"$contractorId\">$contractorName</option>";
               }
-          } else {
-              // No contractors found in the database
-              echo "<option value=\"\">No contractors available</option>";
-          }
-
-          // Close the database connection
-          mysqli_close($dbh);
+            } else {
+              // Handle the error if the query fails
+              $errorInfo = $dbh->errorInfo();
+              echo "Error: " . $errorInfo[2];
+            }
           ?>
         </select>
+
+
+
       </div>
 
       <div class="form-group">

@@ -234,27 +234,8 @@
 		</li>
 		<!-- /Message Notifications -->
 
-		<?php 
-		$sql = "SELECT * from users";
-		$query = $dbh -> prepare($sql);
-		$query->execute();
-		$result=$query->fetch(PDO::FETCH_OBJ);
-		$cnt=1;
-		?>
 
-		<li class="nav-item dropdown has-arrow main-drop">
-			<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-				<span class="user-img"><img src="./profiles/<?php echo htmlentities($result->Picture);?>" alt="User Picture">
-				<span class="status online"></span></span>
-				<span><?php echo htmlentities(ucfirst($_SESSION['userlogin']));?></span>
-			</a>
-			<div class="dropdown-menu">
-				<a class="dropdown-item" href="profile.php">My Profile</a>
-				<a class="dropdown-item" href="settings.php">Settings</a>
-				<a class="dropdown-item" href="logout.php">Logout</a>
-			</div>
-		</li>
-	</ul>
+		
 	<!-- /Header Menu -->
 	
 	<!-- Mobile Menu -->

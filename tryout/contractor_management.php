@@ -106,55 +106,76 @@
 
                 <div class="contractor-list">
                 <table>
-                    <thead>
+                  <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Actions</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Actions</th>
                     </tr>
-                    </thead>
-                    <tbody>
-                    <!-- Fetch and display the contractor data dynamically from the database -->
-                    <!-- Each row represents a contractor -->
-                    <tr>
-                        <td>John Doe</td>
-                        <td>john.doe@example.com</td>
-                        <td>
-                        <!-- Include appropriate actions for deleting contractors -->
-                        <button>Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jane Smith</td>
-                        <td>jane.smith@example.com</td>
-                        <td>
-                        <button>Delete</button>
-                        </td>
-                    </tr>
-                    <!-- Add more rows for other contractors -->
-                    </tbody>
+                  </thead>
+                  <tbody>
+                    <?php
+                    // Fetch the contractors from the database
+                    $query = "SELECT name, email FROM contractors";
+                    $stmt = $dbh->query($query);
+
+                    // Check if there are any contractors
+                    if ($stmt->rowCount() > 0) {
+                      // Loop through the result set and generate table rows
+                      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        $name = $row['name'];
+                        $email = $row['email'];
+
+                        echo '<tr>';
+                        echo '<td>' . $name . '</td>';
+                        echo '<td>' . $email . '</td>';
+                        echo '<td>';
+                        echo '<button>Delete</button>';
+                        echo '</td>';
+                        echo '</tr>';
+                      }
+                    } else {
+                      echo '<tr><td colspan="3">No contractors found</td></tr>';
+                    }
+
+                    // Close the statement
+                    $stmt = null;
+                    ?>
+                  </tbody>
+
                 </table>
+
                 </div>
 
                 <div class="add-contractor-form">
                 <h3>Add Contractor</h3>
-                <form>
+                <form method="POST" action="contractor_function.php">
                     <div>
-                    <label for="contractorName">Name:</label>
-                    <input type="text" id="contractorName" name="contractorName" required>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
                     </div>
                     <div>
-                    <label for="contractorEmail">Email:</label>
-                    <input type="email" id="contractorEmail" name="contractorEmail" required>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
                     </div>
                     <div>
-                    <label for="contractorPassword">Password:</label>
-                    <input type="password" id="contractorPassword" name="contractorPassword" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
                     </div>
+                    <div>
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select class="form-control" id="status" name="status" required>
+                        <option value="active">active</option>
+                        <option value="inactive">inactive</option>
+                        
+                        </select>
+                    </div>
+
                     <button type="submit">Add Contractor</button>
                 </form>
                 </div>
-                
+
   </div>
 
   <!-- Add your JavaScript code here -->
