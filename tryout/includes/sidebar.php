@@ -3,7 +3,7 @@
 					<div id="sidebar-menu" class="sidebar-menu">
 						<ul>
 							<li class="menu-title"> 
-								<span>Main</span>
+								<span>Contactor</span>
 							</li>
 							<li class="submenu">
 								<a href="#"><i class="la la-dashboard"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
@@ -29,13 +29,13 @@
 								</ul>
 							</li>
 							<li class="submenu">
-								<a href="#"><i class="la la-rocket"></i> <span> My Profile</span> <span class="menu-arrow"></span></a>
+								<a href="#"><i class="la la-users"></i> <span> My Profile</span> <span class="menu-arrow"></span></a>
 								<ul style="display: none;">
 									<li><a href="contractors_profile.php">My Profile</a></li>
 								</ul>
 							</li>
 							<li> 
-								<a href="logout.php"><i class="la la-power-off"></i> <span>Logout</span></a>
+								<a href="Logout.php"><i class="la la-power-off"></i> <span>Logout</span></a>
 							</li>
 									
 						</ul>

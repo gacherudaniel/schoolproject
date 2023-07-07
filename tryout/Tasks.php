@@ -64,37 +64,41 @@
 
           <div class="task-list">
             <div class="task-card">
-              <h3>Task 1</h3>
-              <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu ante vitae enim mollis
-                feugiat. Aliquam erat volutpat.</p>
-              <p>Deadline: July 15, 2023</p>
-              <p>Priority: High</p>
-              <p>Status: In Progress</p>
-              <button class="btn btn-primary">Mark as Complete</button>
-              <button class="btn btn-secondary">Request Extension</button>
+            <?php
+              // Assuming you have established a valid PDO database connection
+
+              // Fetch the project data from the database
+              $query = "SELECT * FROM tasks";
+              $result = $dbh->query($query);
+
+              // Check if there are any projects
+              if ($result->rowCount() > 0) {
+                // Loop through the project data and generate the HTML cards
+                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                  $task_name = $row['task_name'];
+                  $project_name = $row['project_name']; 
+                  $description = $row['description'];
+                  $deadline = $row['deadline'];
+                  $priority = $row['priority'];
+                  
+
+                  echo '<div class="project-card">';
+                  echo "<h3>$task_name</h3>";
+                  echo "<p>Project: $project_name</p>";
+                  echo "<p>Description: $description</p>";
+                  echo "<p>Deadline: $deadline</p>";
+                  echo "<p>Priority: $priority</p>";
+                  
+                  echo '<button class="btn btn-primary">Mark as Complete</button>';
+                  echo '<button class="btn btn-secondary">Request Extension</button>';
+                  echo '</div>';
+                }
+              } else {
+                echo '<p>No projects found.</p>';
+              }
+            ?>
             </div>
 
-            <div class="task-card">
-              <h3>Task 2</h3>
-              <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu ante vitae enim mollis
-                feugiat. Aliquam erat volutpat.</p>
-              <p>Deadline: August 1, 2023</p>
-              <p>Priority: Medium</p>
-              <p>Status: Not Started</p>
-              <button class="btn btn-primary">Mark as Complete</button>
-              <button class="btn btn-secondary">Request Extension</button>
-            </div>
-
-            <div class="task-card">
-              <h3>Task 3</h3>
-              <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu ante vitae enim mollis
-                feugiat. Aliquam erat volutpat.</p>
-              <p>Deadline: September 5, 2023</p>
-              <p>Priority: Low</p>
-              <p>Status: Not Started</p>
-              <button class="btn btn-primary">Mark as Complete</button>
-              <button class="btn btn-secondary">Request Extension</button>
-            </div>
           </div>
         </div>
 

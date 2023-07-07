@@ -5,20 +5,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve form data
     $projectName = $_POST['projectName'];
     $contractors = $_POST['contractors'];
+    $deadline = $_POST['deadline'];
     $status = $_POST['status'];
 
     try {
         // Insert data into the projects table
-        $query = "INSERT INTO projects (name, description, start_date, end_date, manager_id)
-                  VALUES (:projectName, '', CURDATE(), '', 1)";
+        $query = "INSERT INTO projects (name, deadline, status) 
+                  VALUES (:projectName, :deadline, :status)";
         $stmt = $dbh->prepare($query);
         $stmt->bindParam(':projectName', $projectName);
+        $stmt->bindParam(':deadline', $deadline);
+        $stmt->bindParam(':status', $status);
         $stmt->execute();
 
         $projectId = $dbh->lastInsertId(); // Get the ID of the inserted project
 
-        // Insert contractor assignments into a separate table (assuming you have a table called contractor_assignments)
-        $query = "INSERT INTO contractor_assignments (project_id, contractor_id)
+        // Insert contractor assignments into a separate table (assuming you have a table called project_contractors)
+        $query = "INSERT INTO contractor_assignments (project_id, contractor_id) 
                   VALUES (:projectId, :contractorId)";
         $stmt = $dbh->prepare($query);
         $stmt->bindParam(':projectId', $projectId);
@@ -28,20 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
         }
 
-        // Update project status
-        $query = "UPDATE projects SET status = :status WHERE id = :projectId";
-        $stmt = $dbh->prepare($query);
-        $stmt->bindParam(':status', $status);
-        $stmt->bindParam(':projectId', $projectId);
-        $stmt->execute();
-
         // Redirect to a success page or perform any other desired action
         echo "<script>alert('Record Added Successfully');</script>";
+        header("Location: Project_Management.php");
+        exit;
     } catch (PDOException $e) {
-    
-        echo "<script>alert('Record not Added Successfully');</script>";
-            header("Location: Project_Management.php");
-            exit;
+        echo "Error: " . $e->getMessage();
     }
 }
 

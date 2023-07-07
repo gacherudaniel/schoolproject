@@ -95,37 +95,40 @@
         </div>
         <!-- /Page Header -->
         <div class="container">
-          <h2>Projects</h2>
+  <h2>Projects</h2>
 
-          <div class="project-list">
-            <div class="project-card">
-              <h3>Project 1</h3>
-              <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu ante vitae enim mollis
-                feugiat. Aliquam erat volutpat.</p>
-              <p>Deadline: July 31, 2023</p>
-              <p>Status: In Progress</p>
-              <button class="btn btn-primary">View Details</button>
-            </div>
+    <div class="project-list">
+      <?php
+        // Assuming you have established a valid PDO database connection
 
-            <div class="project-card">
-              <h3>Project 2</h3>
-              <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu ante vitae enim mollis
-                feugiat. Aliquam erat volutpat.</p>
-              <p>Deadline: August 15, 2023</p>
-              <p>Status: Not Started</p>
-              <button class="btn btn-primary">View Details</button>
-            </div>
+        // Fetch the project data from the database
+        $query = "SELECT * FROM projects";
+        $result = $dbh->query($query);
 
-            <div class="project-card">
-              <h3>Project 3</h3>
-              <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu ante vitae enim mollis
-                feugiat. Aliquam erat volutpat.</p>
-              <p>Deadline: September 10, 2023</p>
-              <p>Status: Completed</p>
-              <button class="btn btn-primary">View Details</button>
-            </div>
-          </div>
-        </div>
+        // Check if there are any projects
+        if ($result->rowCount() > 0) {
+          // Loop through the project data and generate the HTML cards
+          while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            $projectName = $row['name'];
+            $description = $row['description'];
+            $deadline = $row['end_date'];
+            $status = $row['status'];
+
+            echo '<div class="project-card">';
+            echo "<h3>$projectName</h3>";
+            echo "<p>Description: $description</p>";
+            echo "<p>Deadline: $deadline</p>";
+            echo "<p>Status: $status</p>";
+            echo '<button class="btn btn-primary">View Details</button>';
+            echo '</div>';
+          }
+        } else {
+          echo '<p>No projects found.</p>';
+        }
+      ?>
+    </div>
+</div>
+
 
   <!-- /Page Content -->
 			

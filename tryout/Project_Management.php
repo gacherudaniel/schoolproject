@@ -99,7 +99,7 @@
       <thead>
         <tr>
           <th>Project Name</th>
-          <th>Assigned Contractors</th>
+          <th>Assigned Contractors ID</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>
@@ -180,6 +180,10 @@
 
 
 
+      </div>
+      <div class="form-group">
+        <label for="deadline">Deadline</label>
+        <input type="date" class="form-control" name="deadline" id="deadline">
       </div>
 
       <div class="form-group">
