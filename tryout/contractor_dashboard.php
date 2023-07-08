@@ -32,6 +32,22 @@
     <script src="assets/js/html5shiv.min.js"></script>
     <script src="assets/js/respond.min.js"></script>
   <![endif]-->
+  <!-- Include the jQuery library -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <!-- Include the FullCalendar JavaScript library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+  
+  <!-- Your custom styles -->
+  <style>
+    .calendar {
+      margin-bottom: 30px;
+    }
+  </style>
+  
+  <!-- Add the JavaScript code -->
+  
   <style>
     /* Add your custom styles here */
     /* Example styles for the contractor dashboard */
@@ -103,12 +119,59 @@
           <div class="page-wrapper">
     
       <!-- Page Content -->
-              <div class="content container-fluid">
-    
-              <div class="dashboard-header">
-                <h2>Contractor Dashboard</h2>
-                <!-- Display relevant information or metrics about the contractor here -->
-                <p>Welcome, John Doe!</p>
+      <!-- Page Header -->
+              
+            <div class="page-header">
+              <div class="row">
+                <div class="col-sm-12">
+                  <h3 class="page-title">Welcome <?php echo htmlentities(ucfirst($_SESSION['userlogin']));?>!</h3>
+                  <ul class="breadcrumb">
+                    <li class="breadcrumb-item active">Dashboard</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <?php 
+										$sql = "SELECT project_id from projects";
+										$query = $dbh->prepare($sql);
+										$query->execute();
+										$results = $query->fetchAll(PDO::FETCH_OBJ);
+										$totalcount = $query->rowCount();
+									?>
+
+            <div class="row"> 
+              <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                  <div class="card dash-widget">
+                    <div class="card-body">
+                      <span class="dash-widget-icon"><i class="fa fa-rocket"></i></span>
+                      <div class="dash-widget-info">
+                        <h3><?php echo $totalcount; ?></h3>
+                        <span>Projects</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <?php 
+										$sql = "SELECT task_id from tasks";
+										$query = $dbh->prepare($sql);
+										$query->execute();
+										$results = $query->fetchAll(PDO::FETCH_OBJ);
+										$totalcount = $query->rowCount();
+									?>
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                  <div class="card dash-widget">
+                    <div class="card-body">
+                      <span class="dash-widget-icon"><i class="fa fa-diamond"></i></span>
+                      <div class="dash-widget-info">
+                        <h3><?php echo $totalcount; ?></h3>
+                        <span>Tasks</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+
                 <p>Projects Completed: 10</p>
                 <p>Average Rating: 4.5</p>
               </div>
@@ -133,11 +196,12 @@
                 </ul>
               </div>
       
-              <div class="calendar">
-                <h3>Calendar</h3>
-                <!-- Display a calendar view to help contractors visualize their schedule -->
-                <!-- Calendar implementation goes here -->
-              </div>
+              
+
+
+              
+
+
       
               <div class="message-board">
                 <h3>Messages</h3>
