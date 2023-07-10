@@ -4,16 +4,18 @@ include_once("includes/config.php");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve form data
     $projectName = $_POST['projectName'];
+    $description = $_POST['description'];
     $contractors = $_POST['contractors'];
     $deadline = $_POST['deadline'];
     $status = $_POST['status'];
 
     try {
         // Insert data into the projects table
-        $query = "INSERT INTO projects (name, deadline, status) 
-                  VALUES (:projectName, :deadline, :status)";
+        $query = "INSERT INTO projects (name, description, deadline, status) 
+                  VALUES (:projectName, :description, :deadline, :status)";
         $stmt = $dbh->prepare($query);
         $stmt->bindParam(':projectName', $projectName);
+        $stmt->bindParam(':description', $description);
         $stmt->bindParam(':deadline', $deadline);
         $stmt->bindParam(':status', $status);
         $stmt->execute();

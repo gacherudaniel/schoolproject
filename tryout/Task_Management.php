@@ -42,7 +42,7 @@
 
 
   <!-- Custom CSS -->
-  <style>
+  <<style>
     /* Add your custom styles here */
     /* Example styles for the task management page */
     .container {
@@ -61,6 +61,33 @@
     .task-list td {
       padding: 8px;
       text-align: left;
+    }
+
+    .create-task-form {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+    }
+
+    .create-task-form label {
+      font-weight: bold;
+    }
+
+    .create-task-form .form-control {
+      margin-bottom: 10px;
+    }
+
+    .create-task-form button {
+      padding: 10px 20px;
+      background-color: #337ab7;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .create-task-form button:hover {
+      background-color: #286090;
     }
   </style>
 </head>
@@ -88,7 +115,7 @@
                 <h2>Task Management</h2>
 
                 <div class="task-list">
-                  <table class="table">
+                  <table class="task-list table">
                     <thead>
                       <tr>
                         <th>Task Name</th>
@@ -139,7 +166,7 @@
 
                 <!-- Form for creating a new task -->
                 <h3>Create New Task</h3>
-                <form method="POST" action="Tasks_function.php">
+                <form method="POST" action="Tasks_function.php" class="create-task-form ">
                   <div class="form-group">
                     <label for="task_name">Task Name</label>
                     <input type="text" class="form-control"  id="task_name" name="task_name" placeholder="Enter the task name">
