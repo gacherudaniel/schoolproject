@@ -2,6 +2,21 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
+
+// Delete contractor functionality
+if (isset($_GET['delete'])) {
+  $taskId = $_GET['delete'];
+
+  // Delete the task from the database
+  $query = "DELETE FROM contractors WHERE contractor_id = :contractorId";
+  $stmt = $dbh->prepare($query);
+  $stmt->bindParam(':contractorId', $contractorId, PDO::PARAM_INT);
+  $stmt->execute();
+
+  // Redirect to the current page after deleting the task
+  header("Location: " . $_SERVER['PHP_SELF']);
+  exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -124,13 +139,14 @@ include('includes/config.php');
             <tbody>
               <?php
               // Fetch the contractors from the database
-              $query = "SELECT name, email FROM contractors";
+              $query = "SELECT contractor_id, name, email FROM contractors";
               $stmt = $dbh->query($query);
 
               // Check if there are any contractors
               if ($stmt->rowCount() > 0) {
                 // Loop through the result set and generate table rows
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                  $contractorId = $row['contractor_id'];
                   $name = $row['name'];
                   $email = $row['email'];
 
@@ -138,7 +154,7 @@ include('includes/config.php');
                   echo '<td>' . $name . '</td>';
                   echo '<td>' . $email . '</td>';
                   echo '<td>';
-                  echo '<button>Delete</button>';
+                  echo '<a class="btn btn-danger btn-sm" href="?delete=' . $contractorId . '">Delete</a>';
                   echo '</td>';
                   echo '</tr>';
                 }

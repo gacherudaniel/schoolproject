@@ -3,6 +3,27 @@
 	error_reporting(E_ALL); 
 	include_once('includes/config.php');
  
+// Delete task functionality
+if (isset($_GET['delete'])) {
+  $projectId = $_GET['delete'];
+
+  // Delete contractor assignments for the project
+  $query = "DELETE FROM contractor_assignments WHERE project_id = :projectId";
+  $stmt = $dbh->prepare($query);
+  $stmt->bindParam(':projectId', $projectId, PDO::PARAM_INT);
+  $stmt->execute();
+
+  // Delete the project from the projects table
+  $query = "DELETE FROM projects WHERE project_id = :projectId";
+  $stmt = $dbh->prepare($query);
+  $stmt->bindParam(':projectId', $projectId, PDO::PARAM_INT);
+  $stmt->execute();
+  
+
+  // Redirect to the current page after deleting the task
+  header("Location: " . $_SERVER['PHP_SELF']);
+  exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -123,17 +144,20 @@
             <tbody>
               <?php
               // Fetch the projects from the database
-              $query = "SELECT p.name, p.status, GROUP_CONCAT(c.contractor_id SEPARATOR ', ') AS contractor_assignments
-                  FROM projects p
-                  INNER JOIN contractor_assignments ca ON p.project_id = ca.project_id
-                  INNER JOIN contractors c ON ca.contractor_id = c.contractor_id
-                  GROUP BY p.project_id";
+              $query = "SELECT p.project_id, p.name, p.status, GROUP_CONCAT(c.contractor_id SEPARATOR ', ') AS contractor_assignments
+                FROM projects p
+                INNER JOIN contractor_assignments ca ON p.project_id = ca.project_id
+                INNER JOIN contractors c ON ca.contractor_id = c.contractor_id
+                GROUP BY p.project_id";
+
+                  
               $stmt = $dbh->query($query);
 
               // Check if there are any projects
               if ($stmt->rowCount() > 0) {
                 // Loop through the result set and generate table rows
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                  $projectId = $row['project_id'];
                   $projectName = $row['name'];
                   $assignedContractors = $row['contractor_assignments'];
                   $status = $row['status'];
@@ -144,7 +168,7 @@
                   echo '<td>' . $status . '</td>';
                   echo '<td>';
                   echo '<button class="btn btn-primary btn-sm">Edit</button>';
-                  echo '<button class="btn btn-danger btn-sm">Delete</button>';
+                  echo '<a class="btn btn-danger btn-sm" href="?delete=' . $projectId . '">Delete</a>';
                   echo '</td>';
                   echo '</tr>';
                 }

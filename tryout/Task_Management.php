@@ -1,9 +1,25 @@
 <?php
-	session_start();
-	error_reporting(0);
-	include('includes/config.php');
+session_start();
+error_reporting(0);
+include('includes/config.php');
 
+// Delete task functionality
+if (isset($_GET['delete'])) {
+  $taskId = $_GET['delete'];
+
+  // Delete the task from the database
+  $query = "DELETE FROM tasks WHERE task_id = :taskId";
+  $stmt = $dbh->prepare($query);
+  $stmt->bindParam(':taskId', $taskId, PDO::PARAM_INT);
+  $stmt->execute();
+
+  // Redirect to the current page after deleting the task
+  header("Location: " . $_SERVER['PHP_SELF']);
+  exit();
+}
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -108,61 +124,57 @@
           <div class="page-wrapper">
     
       <!-- Page Content -->
-              <div class="content container-fluid">
-    
+      <div class="content container-fluid">
+        <h2>Task Management</h2>
+        <div class="task-list">
+          <table class="task-list table">
+            <!-- Table header code -->
+            <thead>
+              <tr>
+                <th>Task Name</th>
+                <th>Project ID</th>
+                <th>Assigned Contractor ID</th>
+                <th>Deadline</th>
+                <th>Priority</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              // Fetch the tasks from the database
+              $query = "SELECT task_id, task_name, project_id, assigned_to, deadline, priority FROM tasks";
+              $stmt = $dbh->query($query);
 
+              // Check if there are any tasks
+              if ($stmt->rowCount() > 0) {
+                // Loop through the result set and generate table rows
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                  $taskId = $row['task_id'];
+                  $taskName = $row['task_name'];
+                  $projectName = $row['project_id'];
+                  $assignedContractor = $row['assigned_to'];
+                  $deadline = $row['deadline'];
+                  $priority = $row['priority'];
 
-                <h2>Task Management</h2>
-
-                <div class="task-list">
-                  <table class="task-list table">
-                    <thead>
-                      <tr>
-                        <th>Task Name</th>
-                        <th>Project ID</th>
-                        <th>Assigned Contractor ID</th>
-                        <th>Deadline</th>
-                        <th>Priority</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                      // Fetch the contractors from the database
-                      $query = "SELECT task_name, project_id, assigned_to, deadline, priority FROM tasks";
-                      $stmt = $dbh->query($query);
-
-                      // Check if there are any contractors
-                      if ($stmt->rowCount() > 0) {
-                        // Loop through the result set and generate table rows
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                          $task_name = $row['task_name'];
-                          $project_name = $row['project_id'];
-                          $assigned_contractor = $row['assigned_to'];
-                          $deadline = $row['deadline'];
-                          $priority = $row['priority'];
-
-                          echo '<tr>';
-                          echo '<td>' . $task_name . '</td>';
-                          echo '<td>' . $project_name . '</td>';
-                          echo '<td>' . $assigned_contractor . '</td>';
-                          echo '<td>' . $deadline . '</td>';
-                          echo '<td>' . $priority . '</td>';
-                          echo '<td>';
-                          echo '<button>Delete</button>';
-                          echo '</td>';
-                          echo '</tr>';
-                        }
-                      } else {
-                        echo '<tr><td colspan="3">No tasks found</td></tr>';
-                      }
-
-                      // Close the statement
-                      $stmt = null;
-                    ?>
-                  </tbody>
-                  </table>
-                </div>
+                  echo '<tr>';
+                  echo '<td>' . $taskName . '</td>';
+                  echo '<td>' . $projectName . '</td>';
+                  echo '<td>' . $assignedContractor . '</td>';
+                  echo '<td>' . $deadline . '</td>';
+                  echo '<td>' . $priority . '</td>';
+                  echo '<td>';
+                  echo '<a class="btn btn-danger btn-sm" href="?delete=' . $taskId . '">Delete</a>';
+                  
+                  echo '</td>';
+                  echo '</tr>';
+                }
+              } else {
+                echo '<tr><td colspan="6">No tasks found</td></tr>';
+              }
+              ?>
+            </tbody>
+          </table>
+        </div>
 
                 <!-- Form for creating a new task -->
                 <h3>Create New Task</h3>
