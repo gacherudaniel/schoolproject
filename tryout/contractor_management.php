@@ -131,6 +131,7 @@ if (isset($_GET['delete'])) {
           <table>
             <thead>
               <tr>
+                <th>Contractor's ID</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Actions</th>
@@ -151,6 +152,7 @@ if (isset($_GET['delete'])) {
                   $email = $row['email'];
 
                   echo '<tr>';
+                  echo '<td>' . $contractorId . '</td>';
                   echo '<td>' . $name . '</td>';
                   echo '<td>' . $email . '</td>';
                   echo '<td>';
@@ -174,6 +176,10 @@ if (isset($_GET['delete'])) {
         <div class="add-contractor-form">
           <h3>Add Contractor</h3>
           <form method="POST" action="contractor_function.php">
+          <div>
+              <label for="contractor_id">Contractor Id:</label>
+              <input type="number" id="contractor_id" name="contractor_id" required>
+            </div>
             <div>
               <label for="name">Name:</label>
               <input type="text" id="name" name="name" required>

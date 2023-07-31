@@ -1,9 +1,21 @@
-<?php 
-	session_start();
-	error_reporting(0);
-	include('includes/config.php');
-	
- ?>
+<?php
+  session_start();
+  error_reporting(E_ALL);
+  ini_set('display_errors', 1);
+  include('includes/config.php');
+
+  // Check if the contractor is logged in
+  if (!isset($_SESSION['contractor_id'])) {
+      // Redirect to the login page if the contractor is not logged in
+      header("Location: login.php");
+      exit;
+  }
+
+  // Get the contractor ID from the session
+  $contractor_id = $_SESSION['contractor_id'];
+?>
+<!-- Rest of your code -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -126,18 +138,25 @@
                 <div class="col-sm-12">
                   <h3 class="page-title">Welcome <?php echo htmlentities(ucfirst($_SESSION['userlogin']));?>!</h3>
                   <ul class="breadcrumb">
-                    <li class="breadcrumb-item active">Dashboard</li>
+                    <li class="breadcrumb-item active">Dashboard </li>
                   </ul>
+
+
                 </div>
               </div>
             </div>
-            <?php 
-										$sql = "SELECT project_id from projects";
-										$query = $dbh->prepare($sql);
-										$query->execute();
-										$results = $query->fetchAll(PDO::FETCH_OBJ);
-										$totalcount = $query->rowCount();
-									?>
+            <?php
+             $_SESSION['contractor_id'] = $contractor_id; // Set the contractor_id value in the session
+
+              
+              $sql = "SELECT project_id FROM projects WHERE contractor_id = :contractor_id";
+              $query = $dbh->prepare($sql);
+              $query->bindParam(':contractor_id', $contractor_id, PDO::PARAM_INT);
+              $query->execute();
+              $results = $query->fetchAll(PDO::FETCH_OBJ);
+              $totalcount = $query->rowCount();
+            ?>
+
 
             <div class="row"> 
               <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
@@ -173,6 +192,7 @@
 
 
                 <p>Projects Completed: 10</p>
+
                 <p>Average Rating: 4.5</p>
               </div>
       

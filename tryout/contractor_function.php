@@ -3,16 +3,17 @@ include_once("includes/config.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get form values
+    $contractor_id = $_POST['contractor_id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
     $status = $_POST['status'];
 
     // Prepare SQL statements
-    $contractorSql = "INSERT INTO contractors (name, email, password, status) 
-            VALUES (:name, :email, :password, :status)";
-    $userSql = "INSERT INTO users (name, email, password, role) 
-            VALUES (:name, :email, :password, 'contractor')";
+    $contractorSql = "INSERT INTO contractors (contractor_id, name, email, password, status) 
+            VALUES (:contractor_id,  :name, :email, :password, :status)";
+    $userSql = "INSERT INTO users (contractor_id , name, email, password, role) 
+            VALUES (:contractor_id, :name, :email, :password, 'contractor')";
 
     // Begin transaction
     $dbh->beginTransaction();
@@ -20,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Insert into contractors table
         $contractorQuery = $dbh->prepare($contractorSql);
+        $contractorQuery->bindParam(':contractor_id', $contractor_id);
         $contractorQuery->bindParam(':name', $name);
         $contractorQuery->bindParam(':email', $email);
         $contractorQuery->bindParam(':password', $password);
@@ -28,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Insert into users table
         $userQuery = $dbh->prepare($userSql);
+        $userQuery->bindParam(':contractor_id', $contractor_id);
         $userQuery->bindParam(':name', $name);
         $userQuery->bindParam(':email', $email);
         $userQuery->bindParam(':password', $password);

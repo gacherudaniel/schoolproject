@@ -1,16 +1,25 @@
 <?php
     session_start();
-    error_reporting(0);
     include_once("includes/config.php");
 
-    if ($_SESSION['userlogin'] > 0) {
+    // Initialize error messages
+    $wrongusername = '';
+    $wrongpassword = '';
+
+    // Check if the user is already logged in
+    if (isset($_SESSION['userlogin'])) {
         // User is already logged in, redirect based on their role
         if ($_SESSION['role'] === 'contractor') {
             header('location: Contractor_Dashboard.php');
+            exit;
         } elseif ($_SESSION['role'] === 'admin') {
             header('location: Admin_Dashboard.php');
+            exit;
         }
-    } elseif (isset($_POST['login'])) {
+    }
+
+    // Process the login form if submitted
+    if (isset($_POST['login'])) {
         $username = htmlspecialchars($_POST['username']);
         $password = htmlspecialchars($_POST['password']);
 
@@ -29,8 +38,18 @@
                 $_SESSION['userlogin'] = $username;
                 $_SESSION['role'] = $role;
 
-                // Redirect based on role
+                // Redirect based on roles
                 if ($role === 'contractor') {
+                    // Get the contractor ID and set it in the session
+                    $sql_contractor = "SELECT contractor_id FROM contractors WHERE name = :username";
+                    $query_contractor = $dbh->prepare($sql_contractor);
+                    $query_contractor->bindParam(':username', $username, PDO::PARAM_STR);
+                    $query_contractor->execute();
+                    $result_contractor = $query_contractor->fetch(PDO::FETCH_ASSOC);
+                    if ($result_contractor) {
+                        $_SESSION['contractor_id'] = $result_contractor['contractor_id'];
+                    }
+
                     header('location: Contractor_Dashboard.php');
                     exit;
                 } elseif ($role === 'admin') {
@@ -42,9 +61,9 @@
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                    </div>';
+                    </div>'; 
                 }
-            } elseif ($password === $hashpass) {
+            }  elseif ($password === $hashpass) {
                 // Update the password to the hashed value
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                 $updateSql = "UPDATE users SET password = :password WHERE name = :username";
@@ -55,8 +74,31 @@
                     // Password updated successfully
                     $_SESSION['userlogin'] = $username;
                     $_SESSION['role'] = $role;
-                    header('location: Admin_Dashboard.php');
-                    exit;
+                    // Redirect based on roles
+                    if ($role === 'contractor') {
+                        // Get the contractor ID and set it in the session
+                        $sql_contractor = "SELECT contractor_id FROM contractors WHERE name = :username";
+                        $query_contractor = $dbh->prepare($sql_contractor);
+                        $query_contractor->bindParam(':username', $username, PDO::PARAM_STR);
+                        $query_contractor->execute();
+                        $result_contractor = $query_contractor->fetch(PDO::FETCH_ASSOC);
+                        if ($result_contractor) {
+                            $_SESSION['contractor_id'] = $result_contractor['contractor_id'];
+                        }
+
+                        header('location: Contractor_Dashboard.php');
+                        exit;
+                    } elseif ($role === 'admin') {
+                        header('location: Admin_Dashboard.php');
+                        exit;
+                } else {
+                    $wrongpassword = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Oh Snapp!😕</strong> Alert <b class="alert-link">Role: </b>Unknown user role.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>'; 
+                }
                 } else {
                     // Error updating the password
                     echo "Error updating password.";
@@ -79,6 +121,9 @@
         }
     }
 ?>
+
+<!-- Rest of your login page code -->
+
 
 <!DOCTYPE html>
 <html lang="en">

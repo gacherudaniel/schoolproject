@@ -1,7 +1,14 @@
 <?php 
-session_start();
-error_reporting(0);
-include('includes/config.php');
+  // Start the session and include the database configuration file
+  session_start();
+  include_once("includes/config.php");
+
+  // Check if the contractor is logged in
+  if (!isset($_SESSION['contractor_id'])) {
+      // Redirect to the login page or perform other actions
+      header("Location: login.php");
+      exit;
+  }
 ?>
 
 <!DOCTYPE html>
@@ -90,45 +97,65 @@ include('includes/config.php');
         <!-- /Page Header -->
 
         <div class="container">
-          <h2>Projects</h2>
+        
 
           <div class="project-list">
-            <?php
-            // Assuming you have established a valid PDO database connection
+              <?php
+                // Get the contractor ID from the session
+                $contractorId = $_SESSION['contractor_id'];
 
-            // Fetch the project data for the specific contractor from the database
-            $contractorId = $_SESSION['contractor_id'];
-            $query = "SELECT * FROM projects p
-                      INNER JOIN contractor_assignments ca ON p.project_id = ca.project_id
-                      WHERE ca.contractor_id = :contractorId";
-            $stmt = $dbh->prepare($query);
-            $stmt->bindParam(':contractorId', $contractorId, PDO::PARAM_INT);
-            $stmt->execute();
+                try {
+                    // Fetch the project data for the specific contractor from the database
+                    $query = "SELECT * FROM projects WHERE contractor_id = :contractorId";
+                    $stmt = $dbh->prepare($query);
+                    $stmt->bindParam(':contractorId', $contractorId, PDO::PARAM_INT);
+                    $stmt->execute();
 
-            // Check if there are any projects assigned to the contractor
-            if ($stmt->rowCount() > 0) {
-              // Loop through the project data and generate the HTML cards
-              while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $projectName = $row['name'];
-                $description = $row['description'];
-                $deadline = $row['end_date'];
-                $status = $row['status'];
+                    // Check if there are any projects assigned to the contractor
+                    if ($stmt->rowCount() > 0) {
+                        // Loop through the project data and generate the HTML list
+                       
+                        echo '<ul class="project-list">';
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            $projectId = $row['project_id'];
+                            $projectName = $row['name'];
+                            $description = $row['description'];
+                            $deadline = $row['deadline'];
+                            $status = $row['status'];
 
-                echo '<div class="project-card">';
-                echo "<h3>$projectName</h3>";
-                echo "<p>Description: $description</p>";
-                echo "<p>Deadline: $deadline</p>";
-                echo "<p>Status: $status</p>";
-                echo '<button class="btn btn-primary">View Details</button>';
-                echo '</div>';
-              }
-            } else {
-              echo '<p>No projects found.</p>';
-            }
+                            // Truncate the description to a maximum length (e.g., 100 characters) to create a snippet
+                            $maxDescriptionLength = 100;
+                            $snippet = strlen($description) > $maxDescriptionLength ? substr($description, 0, $maxDescriptionLength) . '...' : $description;
 
-            // Close the statement
-            $stmt = null;
-            ?>
+                            echo '<li>';
+                            echo "<h3>$projectName</h3>";
+                            echo "<p>Description: $snippet</p>"; // Display the snippet instead of the full description
+                            echo "<p>Deadline: $deadline</p>";
+                            echo "<p>Status: $status</p>";
+                           // Add the checkbox and form to update project status
+                             // Add the checkbox and form to update project status
+                            echo '<form action="update_status.php" method="post">';
+                            echo '<input type="hidden" name="project_id" value="' . $projectId . '">';
+                            echo '<label for="status_checkbox">Complete</label>';
+                            echo '<input type="checkbox" name="status_checkbox" id="status_checkbox" value="complete">';
+                            echo '<button type="submit">Update Status</button>';
+                            echo '</form>';
+
+                            echo '</li>';
+                          }
+                          echo '</ul>';
+                        } else {
+                          echo '<p>No projects found for this contractor.</p>';
+                        }
+                    }
+                   catch (PDOException $e) {
+                    echo "Error: " . $e->getMessage();
+                }
+                ?>
+
+              
+              
+
           </div>
         </div>
 

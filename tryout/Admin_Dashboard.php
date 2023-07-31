@@ -109,6 +109,68 @@
           </div>
       </div>
         <!-- /Page Header -->
+
+        <div class="row">   
+                <?php 
+										$sql = "SELECT contractor_id from contractors";
+										$query = $dbh->prepare($sql);
+										$query->execute();
+										$results = $query->fetchAll(PDO::FETCH_OBJ);
+										$totalcount = $query->rowCount();
+									?>
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                  <div class="card dash-widget">
+                    <div class="card-body">
+                      <span class="dash-widget-icon"><i class="fa fa-users"></i></span>
+                      <div class="dash-widget-info">
+                        <h3><?php echo $totalcount; ?></h3>
+                        <span>All Contractors</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            <?php 
+										$sql = "SELECT project_id from projects";
+										$query = $dbh->prepare($sql);
+										$query->execute();
+										$results = $query->fetchAll(PDO::FETCH_OBJ);
+										$totalcount = $query->rowCount();
+									?>
+
+            
+              <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                  <div class="card dash-widget">
+                    <div class="card-body">
+                      <span class="dash-widget-icon"><i class="fa fa-rocket"></i></span>
+                      <div class="dash-widget-info">
+                        <h3><?php echo $totalcount; ?></h3>
+                        <span>All Projects</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <?php 
+										$sql = "SELECT task_id from tasks";
+										$query = $dbh->prepare($sql);
+										$query->execute();
+										$results = $query->fetchAll(PDO::FETCH_OBJ);
+										$totalcount = $query->rowCount();
+									?>
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                  <div class="card dash-widget">
+                    <div class="card-body">
+                      <span class="dash-widget-icon"><i class="fa fa-diamond"></i></span>
+                      <div class="dash-widget-info">
+                        <h3><?php echo $totalcount; ?></h3>
+                        <span>All Tasks</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+            </div>
+
     </div>
 
   </div>

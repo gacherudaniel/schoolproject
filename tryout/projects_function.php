@@ -5,31 +5,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve form data
     $projectName = $_POST['projectName'];
     $description = $_POST['description'];
-    $contractors = $_POST['contractors'];
+    $selectedContractorId = $_POST['assigned_contractor'];
     $deadline = $_POST['deadline'];
     $status = $_POST['status'];
+    
 
     try {
         // Insert data into the projects table
-        $query = "INSERT INTO projects (name, description, deadline, status) 
-                  VALUES (:projectName, :description, :deadline, :status)";
+        $query = "INSERT INTO projects (name, description, deadline, status, contractor_id) 
+                  VALUES (:projectName, :description, :deadline, :status, :selectedContractorId)";
         $stmt = $dbh->prepare($query);
         $stmt->bindParam(':projectName', $projectName);
         $stmt->bindParam(':description', $description);
         $stmt->bindParam(':deadline', $deadline);
         $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':selectedContractorId', $selectedContractorId);
         $stmt->execute();
 
         $projectId = $dbh->lastInsertId(); // Get the ID of the inserted project
 
         // Insert contractor assignments into a separate table (assuming you have a table called project_contractors)
         $query = "INSERT INTO contractor_assignments (project_id, contractor_id) 
-                  VALUES (:projectId, :contractorId)";
+                  VALUES (:projectId, :selectedContractorId)";
         $stmt = $dbh->prepare($query);
         $stmt->bindParam(':projectId', $projectId);
 
-        foreach ($contractors as $contractorId) {
-            $stmt->bindParam(':contractorId', $contractorId);
+        foreach ($selectedContractorId as $contractorId) {
+            $stmt->bindParam(':selectedContractorId', $selectedContractorId);
             $stmt->execute();
         }
 
