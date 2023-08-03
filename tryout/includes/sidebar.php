@@ -28,18 +28,8 @@
 									<li><a href="Tasks.php">Tasks</a></li>
 								</ul>
 							</li>
-							<li class="submenu">
-								<a href="#"><i class="la la-calendar"></i> <span> My Calendar</span> <span class="menu-arrow"></span></a>
-								<ul style="display: none;">
-									<li><a href="calendar.php">My Calendar</a></li>
-								</ul>
-							</li>
-							<li class="submenu">
-								<a href="#"><i class="la la-users"></i> <span> My Profile</span> <span class="menu-arrow"></span></a>
-								<ul style="display: none;">
-									<li><a href="contractors_profile.php">My Profile</a></li>
-								</ul>
-							</li>
+							
+							
 							<li> 
 								<a href="Logout.php"><i class="la la-power-off"></i> <span>Logout</span></a>
 							</li>

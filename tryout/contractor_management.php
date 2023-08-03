@@ -1,22 +1,54 @@
 <?php
-session_start();
-error_reporting(0);
-include('includes/config.php');
+  session_start();
+  error_reporting(0);
+  include('includes/config.php');
 
-// Delete contractor functionality
-if (isset($_GET['delete'])) {
-  $taskId = $_GET['delete'];
+  // Delete contractor functionality
+  if (isset($_GET['delete'])) {
+    $taskId = $_GET['delete'];
 
-  // Delete the task from the database
-  $query = "DELETE FROM contractors WHERE contractor_id = :contractorId";
-  $stmt = $dbh->prepare($query);
-  $stmt->bindParam(':contractorId', $contractorId, PDO::PARAM_INT);
-  $stmt->execute();
+    // Delete the task from the database
+    $query = "DELETE FROM contractors WHERE contractor_id = :contractorId";
+    $stmt = $dbh->prepare($query);
+    $stmt->bindParam(':contractorId', $contractorId, PDO::PARAM_INT);
+    $stmt->execute();
 
-  // Redirect to the current page after deleting the task
-  header("Location: " . $_SERVER['PHP_SELF']);
-  exit();
+    // Redirect to the current page after deleting the task
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
 }
+
+  // Check if the form is submitted
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Retrieve form data
+    $contractorId = $_POST['contractorId'];
+    $rating = $_POST['rating'];
+
+    // Validate the input if needed (e.g., check if the admin has already rated this contractor)
+
+    try {
+        // Insert the rating data into the contractor_ratings table
+        $query = "INSERT INTO contractor_ratings (contractor_id, rating) 
+                  VALUES (:contractorId, :rating)";
+        $stmt = $dbh->prepare($query);
+        $stmt->bindParam(':contractorId', $contractorId, PDO::PARAM_INT);
+        $stmt->bindParam(':rating', $rating, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Redirect to the contractor listing page or perform any other desired action
+        echo "<script>alert('Rating submitted successfully');</script>";
+        header("Location: contractor_management.php");
+        exit;
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+  }
+  // Fetch the list of contractors from the database
+  $query = "SELECT contractor_id, name FROM contractors";
+  $stmt = $dbh->query($query);
+  $contractors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -101,6 +133,37 @@ if (isset($_GET['delete'])) {
     .add-contractor-form button:hover {
       background-color: #286090;
     }
+    .container {
+            margin: 20px auto;
+            max-width: 400px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
   </style>
 
 </head>
@@ -205,6 +268,36 @@ if (isset($_GET['delete'])) {
             <button type="submit">Add Contractor</button>
           </form>
         </div>
+        <div class="container">
+          <h2>Rate Contractor</h2>
+          <form method="POST">
+              <div class="form-group">
+                  <label for="contractorId">Select Contractor:</label>
+                  <select name="contractorId" id="contractorId">
+                      <!-- Populate the contractor options from the database -->
+                      <?php foreach ($contractors as $contractor) : ?>
+                          <?php $contractorId = $contractor['contractor_id']; ?>
+                          <?php $contractorName = $contractor['name']; ?>
+                          <option value="<?php echo $contractorId; ?>"><?php echo $contractorName; ?></option>
+                      <?php endforeach; ?>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <label for="rating">Rating:</label>
+                  <select name="rating" id="rating">
+                      <option value="1">1 - Poor</option>
+                      <option value="2">2 - Fair</option>
+                      <option value="3">3 - Good</option>
+                      <option value="4">4 - Very Good</option>
+                      <option value="5">5 - Excellent</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <input type="submit" value="Submit Rating">
+              </div>
+          </form>
+        </div>
+    </div>
 
       </div>
 

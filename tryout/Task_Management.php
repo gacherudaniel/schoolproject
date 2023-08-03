@@ -28,32 +28,25 @@ if (isset($_GET['delete'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Task Management - Admin Interface</title>
 
- <!-- Favicon -->
- <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-		
- <!-- Bootstrap CSS -->
-     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
- 
- <!-- Fontawesome CSS -->
-     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
- 
- <!-- Lineawesome CSS -->
-     <link rel="stylesheet" href="assets/css/line-awesome.min.css">
- 
- <!-- Chart CSS -->
- <link rel="stylesheet" href="assets/plugins/morris/morris.css">
- 
- <!-- Main CSS -->
-     <link rel="stylesheet" href="assets/css/style.css">
- 
- <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
- <!--[if lt IE 9]>
-   <script src="assets/js/html5shiv.min.js"></script>
-   <script src="assets/js/respond.min.js"></script>
- <![endif]-->
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
 
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+  <!-- Fontawesome CSS -->
+  <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+
+  <!-- Lineawesome CSS -->
+  <link rel="stylesheet" href="assets/css/line-awesome.min.css">
+
+  <!-- Chart CSS -->
+  <link rel="stylesheet" href="assets/plugins/morris/morris.css">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Custom CSS -->
 
 
 
@@ -142,7 +135,7 @@ if (isset($_GET['delete'])) {
             <tbody>
               <?php
               // Fetch the tasks from the database
-              $query = "SELECT task_id, task_name, project_id, assigned_to, deadline, priority FROM tasks";
+              $query = "SELECT task_id, task_name, project_id, contractor_id, deadline, priority FROM tasks";
               $stmt = $dbh->query($query);
 
               // Check if there are any tasks
@@ -152,7 +145,7 @@ if (isset($_GET['delete'])) {
                   $taskId = $row['task_id'];
                   $taskName = $row['task_name'];
                   $projectName = $row['project_id'];
-                  $assignedContractor = $row['assigned_to'];
+                  $assignedContractor = $row['contractor_id'];
                   $deadline = $row['deadline'];
                   $priority = $row['priority'];
 
@@ -270,6 +263,10 @@ if (isset($_GET['delete'])) {
                         hiddenInput.value = selectedContractorId;
                       });
                     </script>
+                  </div>
+                  <div class="form-group">
+                    <label for="description">Task Description:</label>
+                    <textarea id="description" name="description" rows="4" cols="150"></textarea>
                   </div>
 
                   <div class="form-group">

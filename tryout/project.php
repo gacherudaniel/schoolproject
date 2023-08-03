@@ -9,6 +9,8 @@
       header("Location: login.php");
       exit;
   }
+    
+  
 ?>
 
 <!DOCTYPE html>
@@ -61,6 +63,72 @@
       padding: 20px;
       margin-bottom: 20px;
     }
+    
+    /* Add your custom styles here */
+    /* Example styles for the contractor dashboard */
+
+    .project-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .project-item {
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+
+    .project-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .project-description {
+      font-size: 16px;
+      color: #444;
+    }
+
+    .project-deadline {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .project-status {
+      font-size: 14px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .status-form {
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .status-label {
+      font-size: 14px;
+      color: #444;
+      margin-right: 5px;
+    }
+
+    .status-button {
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .status-button:hover {
+      background-color: #0056b3;
+    }
+</style>
+
   </style>
 </head>
 
@@ -115,6 +183,9 @@
                     if ($stmt->rowCount() > 0) {
                         // Loop through the project data and generate the HTML list
                        
+                        
+                        // ... Your existing PHP code ...
+
                         echo '<ul class="project-list">';
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             $projectId = $row['project_id'];
@@ -127,23 +198,25 @@
                             $maxDescriptionLength = 100;
                             $snippet = strlen($description) > $maxDescriptionLength ? substr($description, 0, $maxDescriptionLength) . '...' : $description;
 
-                            echo '<li>';
-                            echo "<h3>$projectName</h3>";
-                            echo "<p>Description: $snippet</p>"; // Display the snippet instead of the full description
-                            echo "<p>Deadline: $deadline</p>";
-                            echo "<p>Status: $status</p>";
-                           // Add the checkbox and form to update project status
-                             // Add the checkbox and form to update project status
-                            echo '<form action="update_status.php" method="post">';
+                            echo '<li class="project-item">';
+                            echo "<h3 class='project-title'>$projectName</h3>";
+                            echo "<p class='project-description'>$snippet</p>";
+                            echo "<p class='project-deadline'>Deadline: $deadline</p>";
+                            echo "<p class='project-status'>Status: $status</p>";
+
+                            // Add the checkbox and form to update project status
+                            echo '<form action="update_status.php" method="post" class="status-form">';
                             echo '<input type="hidden" name="project_id" value="' . $projectId . '">';
-                            echo '<label for="status_checkbox">Complete</label>';
-                            echo '<input type="checkbox" name="status_checkbox" id="status_checkbox" value="complete">';
-                            echo '<button type="submit">Update Status</button>';
+                            echo '<label class="status-label" for="status_checkbox">Mark as Completed</label>';
+                            echo '<input type="checkbox" name="status_checkbox" id="status_checkbox" value="Completed">';
+                            echo '<button type="submit" class="status-button">Update Status</button>';
                             echo '</form>';
 
                             echo '</li>';
-                          }
-                          echo '</ul>';
+                        }
+                        echo '</ul>';
+
+
                         } else {
                           echo '<p>No projects found for this contractor.</p>';
                         }

@@ -5,6 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get form values
     $task_name = $_POST['task_name'];
     $selectedProjectId = $_POST['project_name'];
+    $description = $_POST['description'];
     $deadline = $_POST['deadline'];
     $priority = $_POST['priority'];
     $selectedContractorId = $_POST['assigned_contractor'];
@@ -18,21 +19,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($projectExists) {
         // Prepare SQL statement
-        $sql = "INSERT INTO tasks (task_name, project_id, deadline, priority, assigned_to) 
-                VALUES (:task_name, :selectedProjectId, :deadline, :priority, :selectedContractorId)";
+        $sql = "INSERT INTO tasks (task_name, description, project_id, deadline, priority, contractor_id) 
+                VALUES (:task_name, :description, :selectedProjectId, :deadline, :priority, :selectedContractorId)";
 
         $query = $dbh->prepare($sql);
 
         // Bind the parameters
         $query->bindParam(':task_name', $task_name);
         $query->bindParam(':selectedProjectId', $selectedProjectId);
+        $query->bindParam(':description', $description);
         $query->bindParam(':deadline', $deadline);
         $query->bindParam(':priority', $priority);
         $query->bindParam(':selectedContractorId', $selectedContractorId);
 
         // Execute SQL statement
         if ($query->execute()) {
-            echo "<script>alert('New record created successfully');</script>";
+            echo "<script><alert!>('New record created successfully');</script>";
             header("Location: Task_Management.php");
             exit;
         } else {

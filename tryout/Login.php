@@ -167,7 +167,7 @@
 					
 					<div class="account-box">
 						<div class="account-wrapper">
-							<h3 class="account-title">Admin Login</h3>
+							<h3 class="account-title">System Login</h3>
 							<!-- Account Form -->
 							<form method="POST" enctype="multipart/form-data">
 								<div class="form-group">

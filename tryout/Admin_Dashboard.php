@@ -15,30 +15,23 @@
 
   <!-- Favicon -->
   <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-		
-		<!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-		
-		<!-- Fontawesome CSS -->
-  <link rel="stylesheet" href="assets/css/font-awesome.min.css">
-		
-		<!-- Lineawesome CSS -->
-  <link rel="stylesheet" href="assets/css/line-awesome.min.css">
-		
-		<!-- Chart CSS -->
-  <link rel="stylesheet" href="assets/plugins/morris/morris.css">
-		
-		<!-- Main CSS -->
-  <link rel="stylesheet" href="assets/css/style.css">
-		
-		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-		<!--[if lt IE 9]>
-			<script src="assets/js/html5shiv.min.js"></script>
-			<script src="assets/js/respond.min.js"></script>
-		<![endif]-->
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+  <!-- Fontawesome CSS -->
+  <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+
+  <!-- Lineawesome CSS -->
+  <link rel="stylesheet" href="assets/css/line-awesome.min.css">
+
+  <!-- Chart CSS -->
+  <link rel="stylesheet" href="assets/plugins/morris/morris.css">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Custom CSS -->
 
   <!-- Custom CSS -->
   <style>
@@ -83,14 +76,14 @@
 
 <body>
  <!-- Main Wrapper -->
- <div class="main-wrapper">
+  <div class="main-wrapper">
 		
     <!-- Header -->
     <?php include_once("includes/header.php"); ?>
     <!-- /Header -->
     
     <!-- Sidebar -->
-    <?php include_once("includes/admin_sidebar.php");?>
+    <?php include_once("includes/admin_sidebar.php"); ?>
     <!-- /Sidebar -->
     
     <!-- Page Wrapper -->

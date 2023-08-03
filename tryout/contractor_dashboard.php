@@ -11,8 +11,17 @@
       exit;
   }
 
+
   // Get the contractor ID from the session
   $contractor_id = $_SESSION['contractor_id'];
+
+  // Fetch the average rating for the contractor from the contractor_ratings table
+  $query = "SELECT AVG(rating) AS average_rating FROM contractor_ratings WHERE contractor_id = :contractorId";
+  $stmt = $dbh->prepare($query);
+  $stmt->bindParam(':contractorId', $contractor_id, PDO::PARAM_INT);
+  $stmt->execute();
+  $ratingData = $stmt->fetch(PDO::FETCH_ASSOC);
+  $average_rating = $ratingData['average_rating'];
 ?>
 <!-- Rest of your code -->
 
@@ -99,6 +108,22 @@
     .account-settings {
       margin-bottom: 30px;
     }
+    .average-rating {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    font-size: 18px;
+    color: #555;
+    }
+
+    .average-rating p {
+        margin-right: 10px;
+    }
+
+    .rating-number {
+        font-size: 24px;
+        color: #ff9800; /* Change the color to your desired rating color */
+    }
   </style>
 </head>
 
@@ -171,8 +196,9 @@
                   </div>
                 </div>
                 <?php 
-										$sql = "SELECT task_id from tasks";
+										$sql = "SELECT task_id from tasks WHERE contractor_id = :contractor_id";
 										$query = $dbh->prepare($sql);
+                    $query->bindParam(':contractor_id', $contractor_id, PDO::PARAM_INT);
 										$query->execute();
 										$results = $query->fetchAll(PDO::FETCH_OBJ);
 										$totalcount = $query->rowCount();
@@ -188,12 +214,23 @@
                     </div>
                   </div>
                 </div>
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                  <div class="card dash-widget">
+                    <div class="card-body">
+                      <span class="dash-widget-icon"><i class="fa fa-percent"></i></span>
+                      <div class="dash-widget-info">
+                        <h3><?php echo number_format($average_rating, 1); ?></h3>
+                        <span>Average Rating</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </div>
 
 
-                <p>Projects Completed: 10</p>
+               
 
-                <p>Average Rating: 4.5</p>
+                
               </div>
       
               <div class="project-list">

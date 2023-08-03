@@ -40,6 +40,74 @@
 			<script src="assets/js/html5shiv.min.js"></script>
 			<script src="assets/js/respond.min.js"></script>
 		<![endif]-->
+    <style>
+
+      .project-card {
+          border: 1px solid #ccc;
+          padding: 20px;
+          margin-bottom: 20px;
+        }
+      .task-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .task-item {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+      }
+
+      .task-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .project-description {
+        font-size: 16px;
+        color: #444;
+      }
+
+      .task-deadline {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .project-status {
+        font-size: 14px;
+        font-weight: bold;
+        color: #007bff;
+      }
+
+      .status-form {
+        display: inline-block;
+        margin-top: 10px;
+      }
+
+      .status-label {
+        font-size: 14px;
+        color: #444;
+        margin-right: 5px;
+      }
+
+      .status-button {
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+
+      .status-button:hover {
+        background-color: #0056b3;
+      }
+    </style>
 </head>
 
 <body>
@@ -66,36 +134,54 @@
             <div class="task-card">
             <?php
               // Assuming you have established a valid PDO database connection
+              $contractorId = $_SESSION['contractor_id'];
 
-              // Fetch the project data from the database
-              $query = "SELECT * FROM tasks";
-              $result = $dbh->query($query);
-
-              // Check if there are any projects
-              if ($result->rowCount() > 0) {
-                // Loop through the project data and generate the HTML cards
-                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                  $task_name = $row['task_name'];
-                  $project_name = $row['project_name']; 
-                  $description = $row['description'];
-                  $deadline = $row['deadline'];
-                  $priority = $row['priority'];
+              try {
+                // Fetch the project data from the database
+                $query = "SELECT * FROM tasks WHERE contractor_id = :contractorId";
+                $result = $dbh->prepare($query);
+                $result->bindParam(':contractorId', $contractorId, PDO::PARAM_INT);
+                $result->execute();
+                // Check if there are any projects
+                if ($result->rowCount() > 0) {
+                  // Loop through the project data and generate the HTML cards
+                  while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                   
+                    $projectId = $row['project_id'];
+                    $task_name = $row['task_name'];
+                    $project_name = $row['project_name']; 
+                    $description = $row['description'];
+                    $deadline = $row['deadline'];
+                    $priority = $row['priority'];
+                    
 
-                  echo '<div class="project-card">';
-                  echo "<h3>$task_name</h3>";
-                  echo "<p>Project: $project_name</p>";
-                  echo "<p>Description: $description</p>";
-                  echo "<p>Deadline: $deadline</p>";
-                  echo "<p>Priority: $priority</p>";
-                  
-                  echo '<button class="btn btn-primary">Mark as Complete</button>';
-                  echo '<button class="btn btn-secondary">Request Extension</button>';
-                  echo '</div>';
+                    echo '<div class="project-card">';
+                    echo "<h3>$task_name</h3>";
+                    echo "<p>Project: $project_name</p>";
+                    echo "<p>Description: $description</p>";
+                    echo "<p>Deadline: $deadline</p>";
+                    echo "<p>Priority: $priority</p>";
+                    
+                    // Add the checkbox and form to update project status
+                    echo '<form action="update_task_status.php" method="post" class="status-form">';
+                    echo '<input type="hidden" name="task_id" value="' . $taskId . '">';
+                    echo '<label class="status-label" for="status_checkbox">Mark as Completed</label>';
+                    echo '<input type="checkbox" name="status_checkbox" id="status_checkbox" value="Completed">';
+                    echo '<button type="submit" class="status-button">Update Status</button>';
+                    echo '</form>';
+
+                    echo '</li>';
+                  }
+                  echo '</ul>';
+                } else {
+                  echo '<p>No tasks found.</p>';
                 }
-              } else {
-                echo '<p>No projects found.</p>';
+
               }
+            
+                catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+            }
             ?>
             </div>
 
