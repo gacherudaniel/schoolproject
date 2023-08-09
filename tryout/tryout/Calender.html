@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar - Contractor Dashboard</title>
+
+ <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth'
+        });
+        calendar.render();
+      });
+
+    </script>
+  <!-- Custom CSS -->
+  <style>
+    /* Add your custom styles here */
+    /* Example styles for the calendar page */
+    .container {
+      margin-top: 20px;
+    }
+
+    #calendar {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Calendar</h2>
+
+    <div id="calendar"></div>
+  </div>
+
+  <!-- FullCalendar CSS -->
+<link rel="stylesheet" href="node_modules/fullcalendar/dist/fullcalendar.min.css">
+
+<!-- Moment.js -->
+<script src="node_modules/moment/min/moment.min.js"></script>
+
+<!-- FullCalendar JavaScript -->
+<script src="node_modules/fullcalendar/dist/fullcalendar.min.js"></script>
+
+  <script>
+    // Initialize FullCalendar
+    document.addEventListener('DOMContentLoaded', function () {
+      var calendarEl = document.getElementById('calendar');
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: ['interaction', 'dayGrid'],
+        defaultView: 'dayGridMonth',
+        selectable: true,
+        editable: false, // Set to true to enable event editing
+        events: [
+          // Add your event data here
+          {
+            title: 'Project Deadline',
+            start: '2023-07-10',
+            end: '2023-07-12',
+            color: '#dc3545' // Customize event color as needed
+          },
+          {
+            title: 'Task Due',
+            start: '2023-07-15',
+            color: '#ffc107'
+          },
+          {
+            title: 'Meeting',
+            start: '2023-07-20T10:30:00',
+            end: '2023-07-20T12:00:00',
+            color: '#007bff'
+          }
+        ]
+      });
+
+      calendar.render();
+    });
+  </script>
+</body>
+
+</html>

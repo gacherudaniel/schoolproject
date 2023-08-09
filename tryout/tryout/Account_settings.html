@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Settings - Contractor Dashboard</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
+  <!-- Custom CSS -->
+  <style>
+    /* Add your custom styles here */
+    /* Example styles for the account settings page */
+    .container {
+      margin-top: 20px;
+    }
+
+    .account-form {
+      margin-bottom: 30px;
+    }
+
+    .account-form label {
+      font-weight: bold;
+    }
+
+    .account-form .form-group {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Account Settings</h2>
+
+    <div class="account-form">
+      <form>
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" class="form-control" id="name" placeholder="Enter your full name">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter your email address">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" placeholder="Enter your password">
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
+        </div>
+
+        <div class="form-group">
+          <label for="notificationPreference">Notification Preference</label>
+          <select class="form-control" id="notificationPreference">
+            <option value="email">Email</option>
+            <option value="sms">SMS</option>
+            <option value="push">Push Notifications</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <link rel="stylesheet" href="node_modules\bootstrap\dist\js\bootstrap.js">
+</body>
+
+</html>

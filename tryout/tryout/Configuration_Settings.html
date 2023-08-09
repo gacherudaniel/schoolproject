@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Configuration - Admin Interface</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  <style>
+    /* Add your custom styles here */
+    /* Example styles for the system configuration page */
+    .container {
+      margin-top: 20px;
+    }
+
+    .configuration-form {
+      margin-bottom: 30px;
+    }
+
+    .configuration-form label {
+      font-weight: bold;
+    }
+
+    .configuration-form input,
+    .configuration-form select {
+      width: 100%;
+      padding: 8px;
+    }
+
+    .configuration-form button {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>System Configuration</h2>
+
+    <div class="configuration-form">
+      <h3>Notification Preferences</h3>
+      <form>
+        <div class="form-group">
+          <label for="emailNotification">Email Notification:</label>
+          <select class="form-control" id="emailNotification">
+            <option value="enabled">Enabled</option>
+            <option value="disabled">Disabled</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="smsNotification">SMS Notification:</label>
+          <select class="form-control" id="smsNotification">
+            <option value="enabled">Enabled</option>
+            <option value="disabled">Disabled</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </form>
+    </div>
+
+    <div class="configuration-form">
+      <h3>Access Control</h3>
+      <form>
+        <div class="form-group">
+          <label for="userRoles">User Roles:</label>
+          <select class="form-control" id="userRoles" multiple>
+            <option value="admin">Admin</option>
+            <option value="projectManager">Project Manager</option>
+            <option value="contractor">Contractor</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </form>
+    </div>
+
+    <div class="configuration-form">
+      <h3>System Parameters</h3>
+      <form>
+        <div class="form-group">
+          <label for="maxFileSize">Max File Size:</label>
+          <input type="text" class="form-control" id="maxFileSize">
+        </div>
+
+        <div class="form-group">
+          <label for="defaultLanguage">Default Language:</label>
+          <select class="form-control" id="defaultLanguage">
+            <option value="english">English</option>
+            <option value="spanish">Spanish</option>
+            <option value="french">French</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/js/bootstrap.js">
+</body>
+
+</html>
